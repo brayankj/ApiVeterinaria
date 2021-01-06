@@ -3,7 +3,9 @@
     necessary imports
 */
 const bcryptjs = require('bcryptjs');
+const { generarJWT } = require('../helpers/generarJWT');
 const User = require('../models/user');
+const user = require('../models/user');
 
 const getUsers = async( req, res ) => {
     try {
@@ -67,7 +69,13 @@ const createUser = async( req, res ) => {
         user.password = bcryptjs.hashSync( password, salt );
         user.active = true;
         await user.save();
-        res.status(200).json({ ok: true, users: user, });
+        const token = await generarJWT( user.id );
+        res.status(200).json({ 
+            ok: true, 
+            users: user,
+            token,
+        });
+
     } catch (error) {
         return res.status(500).json({ 
             ok: false, 
@@ -97,7 +105,7 @@ const updateUser = async( req, res ) => {
                 });
             }
         }
-        
+
         const typeUser = ['USER_ROLE','MEDIC_ROLE','ADMIN_ROLE'];
         if ( !typeUser.includes( updates.role ) ) {
             return res.status(403).json({ 
@@ -110,6 +118,7 @@ const updateUser = async( req, res ) => {
         const userUpdate = await User.findByIdAndUpdate( id, updates, { new: true });
         res.status(200).json( { ok: true, users: userUpdate} );
     } catch (error) {
+        console.log(  error );
         return res.status(500).json({ 
             ok: false, 
             msg: 'Error en el Servidor consulta al Administrador *Users' 

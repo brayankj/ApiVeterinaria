@@ -1,8 +1,22 @@
+/*
+    --------- Create Crud /api/users routes ---------
+*/
+
+//--------- express require ---------
 const { Router } = require('express');
 const router = Router();
 const { check } = require('express-validator');
+
+
+//--------- exports helpers and middlewares ---------
 const { validarCamposExpress } = require('../helpers/validar-campos-express');
 
+const { validarJWTMiddelware, 
+        validRoleAdmin,
+        validAdmin_and_validUser,
+} = require('../middlewares/validarJWT');
+
+//--------- exports controllers users ---------
 const { getUsers, 
         getUser, 
         createUser, 
@@ -10,9 +24,11 @@ const { getUsers,
         deleteUser,
 } = require('../controllers/user');
 
-router.get('/', getUsers );
 
-router.get('/:id', getUser );
+// --------- create crud by users ---------
+router.get('/', validarJWTMiddelware ,getUsers );
+
+router.get('/:id', validarJWTMiddelware ,getUser );
 
 router.post('/', [
         check('names', 'El nombre es obligatorio').not().isEmpty(),
@@ -25,12 +41,17 @@ router.post('/', [
 ] ,createUser );
 
 router.put('/:id', [
+        validarJWTMiddelware,
+        validAdmin_and_validUser,
         check('names', 'El nombre es obligatorio').not().isEmpty(),
         check('lastnames', 'El apellido es obligatorio').not().isEmpty(),
         check('email', 'El email es obligatorio').isEmail(),
         validarCamposExpress
 ] ,updateUser );
 
-router.delete('/:id', deleteUser );
+router.delete('/:id', [
+        validarJWTMiddelware,
+        validRoleAdmin,
+] ,deleteUser );
 
 module.exports = router;

@@ -1,17 +1,30 @@
+/*
+    --------- Create Crud /api/pets routes ---------
+*/
+
+//--------- express require ---------
 const { Router } = require('express');
 const router = Router();
 const { check } = require('express-validator');
-const { validarCamposExpress } = require('../helpers/validar-campos-express');
 
+//--------- exports helpers and middlewares ---------
+const { validarCamposExpress } = require('../helpers/validar-campos-express');
+const { validarJWTMiddelware } = require('../middlewares/validarJWT');
+
+//--------- exports controllers pet ---------
 const { getPet, 
     createPet, 
     updatePet, 
     deletePet, 
 } = require('../controllers/pet');
 
-router.get('/:id', getPet );
+
+// --------- create crud by pets ---------
+
+router.get('/:id', validarJWTMiddelware ,getPet );
 
 router.post('/', [
+    validarJWTMiddelware,
     check('name', 'El nombre de la mascota es obligatorio').not().isEmpty(),
     check('years', 'La edad de la mascota es obligatoria').not().isEmpty(),
     check('typePet', 'El tipo de mascota es obligatorio').not().isEmpty(),
@@ -20,6 +33,7 @@ router.post('/', [
 ] ,createPet );
 
 router.put('/:id',[
+    validarJWTMiddelware,
     check('name', 'El nombre de la mascota es obligatorio').not().isEmpty(),
     check('years', 'La edad de la mascota es obligatoria').not().isEmpty(),
     check('typePet', 'El tipo de mascota es obligatorio').not().isEmpty(),
@@ -27,6 +41,6 @@ router.put('/:id',[
     validarCamposExpress,
 ],updatePet );
 
-router.delete('/:id', deletePet );
+router.delete('/:id', validarJWTMiddelware ,deletePet );
 
 module.exports = router;

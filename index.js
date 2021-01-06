@@ -12,6 +12,8 @@ bdConnection();
 
 app.use( '/api/users', require('./routes/user') );
 app.use( '/api/pets', require('./routes/pet') );
+app.use( '/api/consultations', require('./routes/appointment') );
+app.use( '/api/auth', require('./routes/auth') );
 
 app.listen( process.env.PORT , () => {
     console.log('Services run in port:' + process.env.PORT );
