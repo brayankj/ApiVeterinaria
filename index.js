@@ -10,6 +10,7 @@ app.use( cors() );
 app.use( express.json() );
 bdConnection();
 
+app.use( '/api/search', require('./routes/search') );
 app.use( '/api/users', require('./routes/user') );
 app.use( '/api/pets', require('./routes/pet') );
 app.use( '/api/consultations', require('./routes/appointment') );
