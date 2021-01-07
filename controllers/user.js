@@ -5,7 +5,6 @@
 const bcryptjs = require('bcryptjs');
 const { generarJWT } = require('../helpers/generarJWT');
 const User = require('../models/user');
-const user = require('../models/user');
 
 const getUsers = async( req, res ) => {
     try {
