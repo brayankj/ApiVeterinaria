@@ -112,10 +112,24 @@ const updateUser = async( req, res ) => {
                 msg: 'Rol no permitido',
             });
         }
+        if(years < 18 ){
+            return res.status(400).json({
+                ok: false,
+                msg: 'La edad minima es de 18 años, intenta de nuevo',
+            });
+        }
 
-        updates.email = email;
+        if( !userBD.google){
+            updates.email = email;
+        }else if( userBD.email !== email ){
+            return res.status(400).json({
+                ok: false,
+                msg: 'Usuarios registrados con cuentas de google no pueden ser modificdas',
+            });
+        }
+        updates.years = years;
         const userUpdate = await User.findByIdAndUpdate( id, updates, { new: true });
-        res.status(200).json( { ok: true, users: userUpdate} );
+        res.status(200).json( { ok: true, users: userUpdate, msg: 'Usuario actualizado!'} );
     } catch (error) {
         console.log(  error );
         return res.status(500).json({ 

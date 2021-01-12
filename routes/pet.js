@@ -12,7 +12,9 @@ const { validarCamposExpress } = require('../helpers/validar-campos-express');
 const { validarJWTMiddelware } = require('../middlewares/validarJWT');
 
 //--------- exports controllers pet ---------
-const { getPet, 
+const { 
+    getPets,
+    getPet, 
     createPet, 
     updatePet, 
     deletePet, 
@@ -22,6 +24,8 @@ const { getPet,
 // --------- create crud by pets ---------
 
 router.get('/:id', validarJWTMiddelware ,getPet );
+
+router.get('/mypets/:id', validarJWTMiddelware ,getPets );
 
 router.post('/', [
     validarJWTMiddelware,

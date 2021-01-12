@@ -18,6 +18,6 @@ router.use( expressfileUpload() );
 // --------- Create Put And Get by upload ---------
 router.put('/:collection/:id', validarJWTMiddelware, uploadFile );
 
-router.get('/:collection/:image', validarJWTMiddelware, viewFile )
+router.get('/:collection/:image', viewFile )
 
 module.exports = router;

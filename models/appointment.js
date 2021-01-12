@@ -8,6 +8,7 @@ const AppointmentSchema = Schema({
     price: { type: Number, required: true },
     day: { type: String },
     nextappointment: { type: String },
+    PaidOut: {  type: Boolean, default: false },
 });
 
 AppointmentSchema.method('toJSON', function(){

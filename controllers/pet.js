@@ -5,6 +5,27 @@
 const Pet = require('../models/pet');
 const User = require('../models/user');
 
+const getPets = async( req, res) => {
+    idOwner = req.params.id;
+    try {
+        const user = await User.findById(idOwner);
+        if(!user){
+            return res.status(404).json({ 
+                ok: false,
+                msg: 'El Usuario que ingresado no esta registrado',
+            });
+        }
+        const pets = await Pet.find({ owner: idOwner});
+        res.status(200).json( { ok: true, pets });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ 
+            ok: false, 
+            msg: 'Error en el Servidor consulta al Administrador *Pets' 
+        });
+    }
+}
+
 const getPet = async( req, res ) => {
     const idPet = req.params.id;
     try {
@@ -95,6 +116,7 @@ const deletePet = async( req, res ) => {
 }
 
 module.exports = { 
+    getPets,
     getPet, 
     createPet, 
     updatePet, 

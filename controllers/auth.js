@@ -15,7 +15,7 @@ const login = async( req, res ) => {
         if ( !userBD ) {
             return res.status(404).json({
                 ok: false,
-                msg: 'El email o password no incorrectos intente de nuevo',
+                msg: 'El email o la contraseña son incorrectos intente de nuevo',
             });
         }
 
@@ -30,7 +30,7 @@ const login = async( req, res ) => {
         if ( !validPass ) {
             return res.status( 404).json({
                 ok: false,
-                msg: 'El email o password no incorrectos intente de nuevo',
+                msg: 'El email o la contraseña son incorrectos intente de nuevo',
             });
         }
 
@@ -79,7 +79,7 @@ const loginGoogle = async( req, res ) => {
                 msg: 'Acceso no permitido'
             });
         }
-
+        await user.save();
         const token = await generarJWT( user.id );
         res.status(200).json({
             ok: true,
