@@ -82,6 +82,7 @@ const updatePet = async( req, res ) => {
         res.status(200).json({
             ok: true,
             pets: petUpdate,
+            msg: 'Mascota Actualizada!',
         });
 
     } catch (error) {

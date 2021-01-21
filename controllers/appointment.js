@@ -30,6 +30,29 @@ const getNote = async( req, res ) => {
     }
 }
 
+const getNotesUser = async(req, res ) => {
+    const idUser = req.params.id;
+    try {
+        const user = await User.findById( idUser );
+        if ( !user ) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Cuenta no encontrada, intenta de nuevo!',
+            });
+        }
+        const notes = await Appointment.find( { $or: [ {'owner': idUser}, {'veterinary': idUser } ] } )
+            .populate('veterinary', 'names lastnames email')
+            .populate('pet', 'name years, typePet description image')
+            .populate('owner', 'names lastnames email');
+        res.status(200).json( { ok: true, notes } );
+    } catch (error) {
+        return res.status(500).json({ 
+            ok: false, 
+            msg: 'Error en el Servidor consulta al Administrador *Notes' 
+        });
+    }
+}
+
 const createNote = async( req, res ) => {
     
     try {
@@ -138,7 +161,8 @@ const deleteNote = async( req, res ) => {
 
 
 module.exports = { 
-    getNote, 
+    getNote,
+    getNotesUser,
     createNote, 
     updateNote, 
     deleteNote, 

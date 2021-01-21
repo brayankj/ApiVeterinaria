@@ -23,13 +23,14 @@ const searchAll = async( req, res ) => {
                     { name: regex },
                     { typePet: regex },
                 ]
-            }),
+            }).populate('owner', 'names lastnames image email'),
             Appointment.find({ 
                 $or: [
                     { day: regex }, 
                     { nextappointment: regex },
                 ]
-            }),
+            }).populate('veterinary', 'names lastnames image email')
+              .populate('pet'),
         ]);
         res.status(200).json({ 
             ok: true,

@@ -51,7 +51,7 @@ router.put('/:id', [
 
 router.delete('/:id', [
         validarJWTMiddelware,
-        validRoleAdmin,
+        validAdmin_and_validUser,
 ] ,deleteUser );
 
 module.exports = router;
