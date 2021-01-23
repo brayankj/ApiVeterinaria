@@ -12,6 +12,7 @@ bdConnection();
 
 app.use( express.static('public') );
 
+app.use( '/api/comment', require('./routes/comment') );
 app.use( '/api/upload', require('./routes/uploads') );
 app.use( '/api/search', require('./routes/search') );
 app.use( '/api/users', require('./routes/user') );
